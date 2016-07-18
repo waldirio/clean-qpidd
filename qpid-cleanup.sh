@@ -15,7 +15,7 @@
 # VARIABLES
 
 satUser="admin"					# Satellite Admin User
-satPassword="redhat"				# Satellite Admin Password
+satPassword="password"				# Satellite Admin Password
 maxperpage=10000 				# Maximum content hosts or organizations in your Satellite
 HAMMER="hammer"
 HOSTNAMEF=$(hostname -f)
