@@ -55,7 +55,7 @@ queue_clean()
   for org in $($HAMMER -u $satUser -p $satPassword organization list --per-page=${maxperpage} | grep " | " | grep -v "^ID" | awk '{ print $3 }')
   do
     echo "finding content hosts in organization $org"
-    hammer -u $satUser -p $satPassword content-host list --organization=${org} --per-page=${maxperpage} | grep " | " | grep -v "^ID" | awk '{ print $1 }' >> $contenthostsfile
+    $HAMMER -u $satUser -p $satPassword content-host list --organization=${org} --per-page=${maxperpage} | grep " | " | grep -v "^ID" | awk '{ print $1 }' >> $contenthostsfile
   done
 
 
