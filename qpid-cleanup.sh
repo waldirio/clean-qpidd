@@ -11,6 +11,8 @@
 #	       - Generate log file from the commands (/var/log/qpid-clean.log)
 #	       - Log Start and Finish time
 # 	       - Generate a report of all queues deleted.
+#
+#              07/21/2016 - Orgs with Space in name
 
 # VARIABLES
 
@@ -52,10 +54,11 @@ queue_clean()
   #generate content hosts UUIDs
   rm -f $contenthostsfile
   echo "finding organizations"
-  for org in $($HAMMER -u $satUser -p $satPassword organization list --per-page=${maxperpage} | grep " | " | grep -v "^ID" | awk '{ print $3 }')
+  # While below permit Orgs with space in the name
+  $HAMMER -u $satUser -p $satPassword organization list --per-page=${maxperpage} | grep " | " | grep -v "^ID" | awk -F"|" '{ print $2 }'|sed -e 's/ $//' -e 's/^ //' -e 's/  .*//' | while read org
   do
     echo "finding content hosts in organization $org"
-    $HAMMER -u $satUser -p $satPassword content-host list --organization=${org} --per-page=${maxperpage} | grep " | " | grep -v "^ID" | awk '{ print $1 }' >> $contenthostsfile
+    $HAMMER -u $satUser -p $satPassword content-host list --organization="$org" --per-page=$maxperpage | grep " | " | grep -v "^ID" | awk '{ print $1 }' >> $contenthostsfile
   done
 
 
